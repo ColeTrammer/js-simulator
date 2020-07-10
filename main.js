@@ -8,8 +8,19 @@ const pixels = ctx.getImageData(0, 0, width, height);
 
 let t = 0;
 
+const smooth = (x) => {
+    x %= 512;
+    x -= 256;
+    x = -Math.abs(x);
+    x += 256;
+    return x;
+};
+
 const colorAt = (x, y, t) => {
-    return [t % 255, t % 255, t % 255];
+    const r = smooth(x + y + t);
+    const g = smooth(x + t);
+    const b = smooth(y);
+    return [r, g, b];
 };
 
 const render = () => {
