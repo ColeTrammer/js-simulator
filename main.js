@@ -7,6 +7,8 @@ const ctx = cvs.getContext('2d');
 const pixels = ctx.getImageData(0, 0, width, height);
 
 let t = 0;
+let anf = -1;
+let running = false;
 
 const hsvToRgb = (color) => {
     const H = color[0];
@@ -45,7 +47,25 @@ const render = () => {
 
     ctx.putImageData(pixels, 0, 0);
     t++;
-    requestAnimationFrame(render);
+    anf = requestAnimationFrame(render);
 };
 
-render();
+const stop = () => {
+    running = false;
+    cancelAnimationFrame(anf);
+};
+
+const start = () => {
+    running = true;
+    render();
+};
+
+const toggle = () => {
+    if (running) {
+        stop();
+    } else {
+        start();
+    }
+};
+
+start();
