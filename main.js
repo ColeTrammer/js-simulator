@@ -8,19 +8,26 @@ const pixels = ctx.getImageData(0, 0, width, height);
 
 let t = 0;
 
-const smooth = (x) => {
-    x %= 512;
-    x -= 256;
-    x = -Math.abs(x);
-    x += 256;
-    return x;
+const hsvToRgb = (color) => {
+    const H = color[0];
+    const S = color[1];
+    const L = color[2];
+    const f = (n) => {
+        const k = (n + H / 30) % 12;
+        const a = S * Math.min(L, 1 - L);
+        return L - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    };
+    return [f(0) * 255, f(8) * 255, f(4) * 255];
 };
 
 const colorAt = (x, y, t) => {
-    const r = smooth(x + y + t);
-    const g = smooth(x + t);
-    const b = smooth(y);
-    return [r, g, b];
+    x -= width / 2;
+    y -= height / 2;
+    let Theta = Math.atan2(y, x);
+    if (Theta < 0) {
+        Theta += 2 * Math.PI;
+    }
+    return hsvToRgb([(Theta * 180) / Math.PI + t, 0.5, 0.5]);
 };
 
 const render = () => {
