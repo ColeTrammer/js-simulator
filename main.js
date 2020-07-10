@@ -23,11 +23,12 @@ const hsvToRgb = (color) => {
 const colorAt = (x, y, t) => {
     x -= width / 2;
     y -= height / 2;
+    const R = Math.sqrt(x * x, y * y);
     let Theta = Math.atan2(y, x);
     if (Theta < 0) {
         Theta += 2 * Math.PI;
     }
-    return hsvToRgb([(Theta * 180) / Math.PI + t, 0.5, 0.5]);
+    return hsvToRgb([(Theta * 180) / Math.PI + t, (1.0 / R) * 75, 0.5]);
 };
 
 const render = () => {
